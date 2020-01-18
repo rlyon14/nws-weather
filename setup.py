@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='nws-history',
     description='dev package',
-    author='R. Lyon.',
+    author='rlyon',
     author_email='rlyon14@yahoo.com',
     version='0.1.1',
     packages=['nws-history',],
@@ -11,7 +11,7 @@ setup(
 		'matplotlib>=3.1.0',
         'numpy',
         'mpl-marker',
-        'click'
+        'click',
         'pyqt5'
     ),
     entry_points='''
