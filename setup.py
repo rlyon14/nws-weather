@@ -15,6 +15,6 @@ setup(
     ),
     entry_points='''
         [console_scripts]
-        weather=cli:cli
+        nws-weather=cli:cli
     ''',
 )
