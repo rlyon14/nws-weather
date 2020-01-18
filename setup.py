@@ -1,20 +1,21 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='weather',
+    name='nws-history',
     description='dev package',
-    author='Rick Lyon',
-    author_email='rlyon@firstrf.com',
+    author='R. Lyon.',
+    author_email='rlyon14@yahoo.com',
     version='0.1.1',
-    packages=['weather',],
+    packages=['nws-history',],
     install_requires=(
 		'matplotlib>=3.1.0',
         'numpy',
-        'markerplot',
+        'mpl-marker',
         'click'
+        'pyqt5'
     ),
     entry_points='''
         [console_scripts]
-        nws-weather=cli:cli
+        weather=cli:cli
     ''',
 )
