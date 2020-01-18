@@ -14,7 +14,7 @@ class PostInstallCommand(install):
 		super().run()
 		self.installed_dp = True
 		try:
-			self.install_pkgs(*git_dependencies, editable=False)
+			self.install_pkgs(*git_dependencies, editable=True)
 		except:
 			self.installed_dp = False
 
@@ -52,7 +52,6 @@ setup(
     install_requires=(
 		'matplotlib>=3.1.0',
         'numpy',
-        'markerplot',
         'click',
         'pyqt5'
     ),
