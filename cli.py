@@ -1,4 +1,4 @@
-from weather import plotTemp
+from noaahistory import plotTemp
 import matplotlib.pyplot as plt
 
 import click
@@ -13,3 +13,6 @@ def cli(loc):
     plt.show()
 
 
+if __name__ == '__main__':
+    p = plotTemp('KLMO')
+    plt.show()

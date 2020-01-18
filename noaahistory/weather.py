@@ -33,7 +33,15 @@ def plotTemp(plotloc='longmont'):
     f = urllib.request.urlopen('https://w1.weather.gov/data/obhistory/{}.html'.format(site))
     html = HTMLreader(f)
     table = html.findElement('table', 'cellspacing','3')[0]
-  
+    try:
+        title = html.findElement('title')
+        title = title[0].getAllContent()[0].split(':')
+        title = title[2].strip()
+        print(title)
+    
+    except:
+        title = ''
+
     temps = str2float(table[3:,6]).flatten()
     dew = str2float(table[3:,7]).flatten()
 
@@ -123,9 +131,7 @@ def plotTemp(plotloc='longmont'):
         ax1.legend(fontsize='small', loc='upper left')
         par1.legend(fontsize='small', loc='upper right')
     
-        site = loc[plotloc] if plotloc in loc else ''
-        plt.title('3 Day history for {} ({})'.format(plotloc, site))
-
+        plt.title('3 Day History for {} ({})'.format(title, site))
 
         ## wind
         par2 = ax2.twinx()
@@ -149,15 +155,7 @@ def plotTemp(plotloc='longmont'):
         ax1.marker_add(xd=dates_sec[0])
         ax2.marker_add(xd=dates_sec[0])
 
-        site = loc[plotloc] if plotloc in loc else ''
-
         ax2.legend(fontsize='small', loc='upper left')
         par2.legend(fontsize='small', loc='upper right')
     
     plot_temp()
-    
-
-if __name__ == "__main__":
-
-    f1 = plotTemp('longmont')
-    plt.show()
