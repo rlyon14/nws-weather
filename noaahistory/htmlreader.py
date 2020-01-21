@@ -145,7 +145,7 @@ TAG_SCRIPT = 2
 TAG_STYLE = 3
 
 class HTMLreader:
-    
+    ## voidElements cannot have child tags
     voidElements = ["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr", "p"]
     states = ["INIT", "TAG", "TAG_NAME", "ATTR_KEY", "ATTR_VAL", "ATTR_VAL_QUOTE_ON", "ATTR_VAL_SQUOTE_ON", "ATTR_VAL_QUOTE_OFF", "SCRIPT", "SCRIPT_END", "CONTENT", "END_TAG", "COMMENT", "END_TAG_SCRIPT", "COMMENT_TAG", "COMMENT_PR", "STYLE_CSS", "END_TAG_STYLE", "STYLE_END"]
 
@@ -207,6 +207,9 @@ class HTMLreader:
     
     def isTagVoid(self, tag):
         return tag.strip().lower() in self.voidElements
+
+    def isTagTable(self, tag):
+        return tag.strip().lower() in ['td', 'tr']
     
     def isTagScript(self, tag):
         return True if (tag.strip().lower() == "script") else False
@@ -257,6 +260,9 @@ class HTMLreader:
                 else: self.stateTo(ATTR_KEY, TAG_HIER)
 
             elif (ch == '>'):
+                if (self.isTagTable(self.curBuild)) and (self.curNode.tag == self.curBuild):
+                    self.upOneLevel()
+                    
                 self.addNode(self.curBuild)
                 if (self.isTagVoid(self.curBuild)):
                     self.stateTo(CONTENT)
