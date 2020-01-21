@@ -1,4 +1,4 @@
-from noaahistory import plotTemp
+from noaahistory import plotTemp, plotAPRL
 import matplotlib.pyplot as plt
 
 import click
@@ -8,8 +8,12 @@ import click
 def cli(loc):
     """ [boulder, leesburg, provo, longmont, bend]
     """
-
-    p = plotTemp(loc)
+    if loc[0] == 'K':
+        p = plotTemp(loc)
+    else:
+        if loc[1] == 'W':
+           loc = loc.replace('W', '') 
+           p = plotAPRL(loc)
     plt.show()
 
 

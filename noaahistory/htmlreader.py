@@ -168,8 +168,11 @@ class HTMLreader:
         if isinstance(ch, bytes):
             ch = ch.decode('utf-8')
             while(len(ch)):
-                ch = stream.read(1).decode('utf-8')
-                self.parseHTML(ch)
+                try:
+                    ch = stream.read(1).decode('utf-8')
+                    self.parseHTML(ch)
+                except:
+                    pass
         else:
             while(len(ch)):
                 ch = stream.read(1)
