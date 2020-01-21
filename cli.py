@@ -14,5 +14,5 @@ def cli(loc):
 
 
 if __name__ == '__main__':
-    p = plotTemp('KLMO')
+    p = plotTemp('KSLC')
     plt.show()
