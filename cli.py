@@ -13,7 +13,7 @@ def cli(loc):
     else:
         if loc[1] == 'W':
            loc = loc.replace('W', '') 
-           p = plotAPRL(loc)
+        p = plotAPRL(loc)
     plt.show()
 
 

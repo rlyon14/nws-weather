@@ -26,7 +26,6 @@ def plotAPRL(site, days=1):
         f = urllib.request.urlopen('https://weather.gladstonefamily.net/site/{}'.format(site))
         html = HTMLreader(f)
 
-        html.printToFile()
         info = html.findElement('h1')[0]
         info = info.getAllContent()[0]
         print(info)
@@ -85,9 +84,7 @@ def plotAPRL(site, days=1):
         label = start_time + datetime.timedelta(hours=h*label_hour_step)
         xlabels_sec.append((label-start_time).total_seconds())
         xlabels.append(label.strftime('%m/%d %H:%M'))
-    
-    print(xlabels, xlabels_sec)
-    print(int(hour_span))
+
     # xlabels = list(np.flip(xlabels, axis=0))
     # xlabels_sec = list(np.flip(xlabels_sec, axis=0))
 
