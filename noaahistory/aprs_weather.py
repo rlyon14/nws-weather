@@ -11,6 +11,7 @@ import matplotlib
 import tkinter
 import re
 from dateutil import tz
+from time import time
 
 def str2float(ary, omit='NA'):
     ary = np.array(ary)
@@ -20,7 +21,7 @@ def str2float(ary, omit='NA'):
     return ary
 
 
-def plotAPRL(site, days=1):
+def plotAPRS(site, days=7):
 
     try:
         f = urllib.request.urlopen('https://weather.gladstonefamily.net/site/{}'.format(site))
@@ -35,11 +36,12 @@ def plotAPRL(site, days=1):
 
     matplotlib.use('Qt5Agg')
     f = urllib.request.urlopen('https://weather.gladstonefamily.net/cgi-bin/wxobservations.pl?site={}&days={}&html=1'.format(site, days))
+
+    stime = time()
     html = HTMLreader(f)
-    
+    print(time()-stime)
 
     #html.head.printNode(r'C:\Users\rlyon\packages\noaahistory\trunk\noaahistory\test.html')
-
     table = html.findElement('table')[0]
 
     temps = str2float(table[1:,2]).flatten()
@@ -63,7 +65,12 @@ def plotAPRL(site, days=1):
         dt.append(time_i)
         #print(time_i.strftime('%Y-%m-%d %H:%M:%S'))
 
-    label_hour_step = 3
+    raw_hour_span = (dt[-1] - dt[0]).total_seconds()/3600
+    label_hour_step = (raw_hour_span // 8) 
+    print(label_hour_step)
+    if label_hour_step > 3:
+        label_hour_step -= (label_hour_step % 3)
+    print(label_hour_step)
     label_delta = datetime.timedelta(hours=dt[0].hour % label_hour_step, 
                                      minutes=dt[0].minute, 
                                      seconds=dt[0].second,
@@ -123,7 +130,7 @@ def plotAPRL(site, days=1):
         
         ax1.legend(fontsize='small', loc='upper left')
     
-        plt.title(info)
+        plt.title(title)
 
         ## wind
         par2 = ax2.twinx()
@@ -154,6 +161,6 @@ def plotAPRL(site, days=1):
 
 if __name__ == '__main__':
     #p = plotTemp('E1488')
-    p = plotAPRL('E4897')
+    p = plotAPRS('E4897', days=1)
     plt.show()
 

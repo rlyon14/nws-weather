@@ -32,7 +32,7 @@ class HTMLnode:
     def addContent(self, content):
         self.content += content
 
-    def findElement(self, tag = None, key = None, value = None):
+    def findElement(self, tag = None, key = None, value = None, depth=0):
         matches = []
         #print(self.tag, self.attr)
         if type(tag) != list:
@@ -45,8 +45,10 @@ class HTMLnode:
                     matches.append(self)
                     
         subTag = self.firstChild
+        #print(self.tag, depth)
+
         while (subTag != None):
-            matches += subTag.findElement(tag, key, value)		
+            matches += subTag.findElement(tag, key, value, depth+1)		
             subTag = subTag.nextSib
         
         return matches
@@ -164,19 +166,11 @@ class HTMLreader:
         self.head = None
         self.curNode = None
 
-        ch = stream.read(1)
-        if isinstance(ch, bytes):
-            ch = ch.decode('utf-8')
-            while(len(ch)):
-                try:
-                    ch = stream.read(1).decode('utf-8')
-                    self.parseHTML(ch)
-                except:
-                    pass
-        else:
-            while(len(ch)):
-                ch = stream.read(1)
-                self.parseHTML(ch)
+        data = stream.read()
+        if isinstance(data, bytes):
+            data = data.decode('utf-8')
+        for ch in data:
+            self.parseHTML(ch)
 
     def printToFile(self, fpath = None):
         if fpath == None:
@@ -264,6 +258,9 @@ class HTMLreader:
 
             elif (ch == '>'):
                 if (self.isTagTable(self.curBuild)) and (self.curNode.tag == self.curBuild):
+                    self.upOneLevel()
+                if (self.curNode != None and self.curNode.tag == 'td' and self.curBuild == 'tr'):
+                    self.upOneLevel()
                     self.upOneLevel()
                     
                 self.addNode(self.curBuild)
