@@ -1,4 +1,4 @@
-from noaahistory import plotTemp, plotAPRS, plotAirQuality
+from noaahistory import plot_aprs, plot_nws, plotAirQuality
 import matplotlib.pyplot as plt
 
 import click
@@ -11,15 +11,12 @@ def cli(site, days, air):
     if (air):
         p1 = plotAirQuality()
 
-    if site[0] == 'K':
-        p = plotTemp(site)
+    if site[0] == 'K' and len(site.strip()) == 4:
+        plot_nws(site)
     else:
-        if site[1] == 'W':
-           site = site.replace('W', '') 
-        p = plotAPRS(site, days)
+        plot_aprs(site, days)
     plt.show()
 
-
 if __name__ == '__main__':
-    p = plotTemp('KSLC')
+    p = plot_nws('KLMO')
     plt.show()
