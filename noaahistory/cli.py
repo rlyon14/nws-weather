@@ -55,11 +55,11 @@ def get_station_default():
     return site.strip('][').split(', ') 
 
 @click.command()
-@click.argument('site', nargs=-1, help='NWS or APRS station call sign')
+@click.argument('site', nargs=-1)
 @click.option('--days', default=3, help='number of days (only for APRS)')
 @click.option('--air', is_flag=True)
 @click.option('--name', help='assign current station call sign to name')
-@click.option('--default', is_flag=True, 'set current station(s) to default')
+@click.option('--default', is_flag=True, help='set current plot to default')
 
 def cli(site, days, air, name, default):
 

@@ -147,7 +147,70 @@ def plot_aprs(site, days=7):
     par2.legend(fontsize='small', loc='upper right')
 
 
+def plot_compare(*sites, days=3):
+    matplotlib.use('Qt5Agg')
+    titles = [None]*len(sites)
+    time_dataz = [None]*len(sites)
+    weather_dataz = [None]*len(sites) 
+
+    for i, site in enumerate(sites):
+        if site[0] == 'K' and len(site.strip()) == 4:
+            titles[i], time_dataz[i], weather_dataz[i] = fetch_nws_station(site)
+        else:
+            titles[i], time_dataz[i], weather_dataz[i]  = fetch_aprs_station(site, days)
+
+    fig, (ax1) = plt.subplots(1, 1, constrained_layout=True, figsize=(18 ,9))
+    ax1.grid(linewidth=0.5, linestyle='-')
+
+    ## find earliest start time
+    start_idx = 0
+    start = time_dataz[0][1]
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    max_points = 0
+    for i, dt in enumerate(time_dataz):
+        (dates_sec, start_time, xlabels, xlabels_sec) = dt
+        start_time = start_time.replace(tzinfo=None)
+        start = start.replace(tzinfo=None)
+        if (start_time < start):
+            start = start_time
+            start_idx = i
+        if len(dates_sec) > max_points:
+            max_points = len(dates_sec)
+
+
+    plt.xticks(time_dataz[start_idx][3], time_dataz[start_idx][2], fontsize='small')
+    
+
+    ## adjust other time data to new reference
+    for i, dt in enumerate(time_dataz):
+        (dates_sec_t, start_time_t, xlabels, xlabels_sec) = time_dataz[i]
+        (temps, dew, wind, wind_dir, cond, pres, precip) = weather_dataz[i]
+
+        dates_sec = np.array(dates_sec_t)
+        data = np.array(temps)
+
+        if site[0] == 'K' and len(site.strip()) == 4:
+            dates_sec = np.flip(dates_sec)
+            data = np.flip(data)
+
+        if i != start_idx: 
+            delta = (start_time_t - start).total_seconds()
+            dates_sec += delta
+
+        ax1.plot(dates_sec, data, label = '{} temp (F)'.format(sites[i]))
+
+    def xdata_to_timestamp(sec):
+        dt = start + datetime.timedelta(seconds=sec)
+        return dt.strftime('%m/%d %H:%M')
+
+    ax1.legend(fontsize='small', loc='upper left')  
+    fig.marker_enable(xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True)
+
+    #ax1.marker_add(xd=dates_sec[-1])
+
+
 if __name__ == '__main__':
     #p = plot_nws('KLMO')
-    p = plot_aprs('EW1488', days=3)
+    #plot_aprs('EW0013')
+    plot_compare('KLMO', 'KSLC', 'KPVU',days=3)
     plt.show()

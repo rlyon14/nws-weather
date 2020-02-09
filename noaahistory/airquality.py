@@ -96,7 +96,7 @@ def plotAirQuality():
     ax.plot(plot_ts, pm2_5, color='darkBlue', label='PM2.5 ($\mu$g/m$^3$)')
 
     ax.plot(plot_ts, pm10, color='darkGreen', label='PM10 ($\mu$g/m$^3$)')
-    ax.plot(plot_ts, oz, color='darkOrange', label='O3 (ppb)')
+    #ax.plot(plot_ts, oz, color='darkOrange', label='O3 (ppb)')
     #ax.legend()
 
     #ax = p.axes[1]
