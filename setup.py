@@ -4,7 +4,7 @@ import subprocess
 import os
 from pathlib import Path
 
-git_dependencies = ['svn+https://github.com/rlyon14/markerplot/trunk#egg=markerplot',]
+git_dependencies = [('markerplot', 'svn+https://github.com/rlyon14/markerplot/trunk#egg=markerplot'),]
 
 dir_ = Path(__file__).parent
 import_path = str(dir_ / 'cli')
@@ -41,8 +41,11 @@ class PostInstallCommand(install):
     def install_pkgs(self, *paths, editable=False):
         print('Installing Packages: {}'.format(paths))
         commands = []
-        for p in paths:
-            commands += ['pip install {}{}'.format('-e ' if editable else '', p)]
+        for name, p in paths:
+            try:
+                return __import__(name)
+            except ImportError:
+                commands += ['pip install {}{}'.format('-e ' if editable else '', p)]
         print(self.subprocess_cmd(*commands))
 
 setup(
