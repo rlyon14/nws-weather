@@ -26,16 +26,15 @@ def fetch_aprs_station(site, days):
 
         info = html.findElement('h1')[0]
         info = info.getAllContent()[0]
-        print(info)
         title = info
     except:
         title = site
 
     if site[1] == 'W':
         site = site.replace('W', '')
+    print(title)
     
     url = 'https://weather.gladstonefamily.net/cgi-bin/wxobservations.pl?site={}&days={}&html=1'.format(site, days)
-    print(url)
     f = urllib.request.urlopen(url)
 
     stime = time()

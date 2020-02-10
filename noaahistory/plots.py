@@ -178,7 +178,7 @@ def plot_compare(*sites, days=3):
             max_points = len(dates_sec)
 
 
-    plt.xticks(time_dataz[start_idx][3], time_dataz[start_idx][2], fontsize='small')
+    plt.xticks(time_dataz[start_idx][3], time_dataz[start_idx][2], fontsize='x-small')
     
 
     ## adjust other time data to new reference
@@ -194,6 +194,8 @@ def plot_compare(*sites, days=3):
             data = np.flip(data)
 
         if i != start_idx: 
+            start_time_t = start_time.replace(tzinfo=None)
+            start = start.replace(tzinfo=None)
             delta = (start_time_t - start).total_seconds()
             dates_sec += delta
 
