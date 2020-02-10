@@ -178,11 +178,12 @@ def plot_compare(*sites, days=3):
             max_points = len(dates_sec)
 
 
-    plt.xticks(time_dataz[start_idx][3], time_dataz[start_idx][2], fontsize='x-small')
-    
+    plt.xticks(time_dataz[start_idx][3], time_dataz[start_idx][2], fontsize='small')
+    titles = list(titles)
 
     ## adjust other time data to new reference
     for i, dt in enumerate(time_dataz):
+        titles[i] = titles[i].split(') in')[-1].strip()
         (dates_sec_t, start_time_t, xlabels, xlabels_sec) = time_dataz[i]
         (temps, dew, wind, wind_dir, cond, pres, precip) = weather_dataz[i]
 
@@ -199,7 +200,7 @@ def plot_compare(*sites, days=3):
             delta = (start_time_t - start).total_seconds()
             dates_sec += delta
 
-        ax1.plot(dates_sec, data, label = '{} temp (F)'.format(sites[i]))
+        ax1.plot(dates_sec, data, label = '{} ({}) $\degree$F'.format(titles[i], sites[i]))
 
     def xdata_to_timestamp(sec):
         dt = start + datetime.timedelta(seconds=sec)
