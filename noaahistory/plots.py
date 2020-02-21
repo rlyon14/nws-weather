@@ -33,7 +33,7 @@ def plot_nws(plotloc='longmont'):
         dt = start_time + datetime.timedelta(seconds=sec)
         return dt.strftime('%m/%d %H:%M')
 
-    def xydata_to_wind(sec, ydata, idx=None):
+    def xydata_to_wind(sec, ydata, mxd=None):
         idx = np.argmin(np.abs(dates_sec - sec))
         if wind[idx] > 0:
             return '{}{:.0f}\n{}'.format(wind_dir[idx], wind[idx], cond[idx].strip())
@@ -102,7 +102,7 @@ def plot_aprs(site, days=7):
         dt = start_time + datetime.timedelta(seconds=sec)
         return dt.strftime('%m/%d %H:%M')
 
-    def xydata_to_wind(sec, ydata, idx=None):
+    def xydata_to_wind(sec, ydata, mxd=None):
         idx = np.argmin(np.abs(dates_sec - sec))
         if wind[idx] > 0:
             return '{} {:.0f}'.format(wind_dir[idx], wind[idx])
