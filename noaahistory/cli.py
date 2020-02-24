@@ -90,4 +90,4 @@ def cli(site, days, air, name, default):
     if default:
         set_station_default(site)
 
-    plt.show()
+    #plt.show()
