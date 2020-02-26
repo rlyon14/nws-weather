@@ -42,7 +42,7 @@ def plot_nws(plotloc='longmont'):
             return cond[idx].strip()
 
     ## create plots
-    app, fig, (ax1, ax2) = interactive_subplots(2, 1, figsize=(18 ,9), constrained_layout=True, )
+    fig, (ax1, ax2) = interactive_subplots(2, 1, figsize=(18 ,9), constrained_layout=True)
     par1 = ax1.twinx()
     ax1.grid(linewidth=0.5, linestyle='-')
     ax1.set_title('3 Day History for {} ({})'.format(title, site))
@@ -90,7 +90,7 @@ def plot_nws(plotloc='longmont'):
     ax2.legend(fontsize='small', loc='upper left')
     par2.legend(fontsize='small', loc='upper right')
 
-    app.show()
+    plt.show()
 
 
 def plot_aprs(site, days=7):
@@ -115,7 +115,7 @@ def plot_aprs(site, days=7):
             return ''
 
     ## create plots
-    app, fig, (ax1, ax2) = interactive_subplots(2, 1, figsize=(18 ,9), constrained_layout=True)
+    fig, (ax1, ax2) = interactive_subplots(2, 1, figsize=(18 ,9), constrained_layout=True)
     ax1.grid(linewidth=0.5, linestyle='-')
     
     #plt.sca(ax1)
@@ -145,11 +145,13 @@ def plot_aprs(site, days=7):
 
     line = par2.plot(dates_sec, pres, 'gray', label = 'pres (mbar)')
 
-    fig.marker_enable(xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True, top_axes=(ax1, ax2))
+    #fig.marker_enable(xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True, top_axes=(ax1, ax2))
     #ax2.marker_ignore(b1, line[0])
     ax2.marker_ignore(line[0])
 
     ax2.marker_set_params(yformat=xydata_to_wind)
+    print('params1', id(ax1.marker_params))
+    print('params2', id(ax2.marker_params))
 
     ax2.marker_link(ax1)
     ax1.marker_add(xd=dates_sec[-1])
@@ -157,7 +159,7 @@ def plot_aprs(site, days=7):
 
     ax2.legend(fontsize='small', loc='upper left')
     #par2.legend(fontsize='small', loc='upper right')
-    app.show()
+    plt.show()
 
 
 def plot_compare(*sites, days=3):
@@ -172,7 +174,7 @@ def plot_compare(*sites, days=3):
         else:
             titles[i], time_dataz[i], weather_dataz[i]  = fetch_aprs_station(site, days)
 
-    app, fig, (ax1) = interactive_subplots(1, 1, figsize=(18 ,9), constrained_layout=True)
+    fig, (ax1) = interactive_subplots(1, 1, figsize=(18 ,9), constrained_layout=True)
     ax1.grid(linewidth=0.5, linestyle='-')
 
     ## find earliest start time
@@ -223,7 +225,7 @@ def plot_compare(*sites, days=3):
 
     ax1.legend(fontsize='small', loc='upper left')  
     fig.marker_enable(xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True)
-    app.show()
+    plt.show()
     #ax1.marker_add(xd=dates_sec[-1])
 
 
