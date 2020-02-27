@@ -73,13 +73,14 @@ def plot_nws(plotloc='longmont'):
     ax1.set_xticklabels(xlabels)
     ax2.tick_params(labelsize='small')
     
-    m1, s1, b1 = ax2.stem(dates_sec, wind, 'b', label = 'max wind (mph)', markerfmt='.', basefmt=' ', use_line_collection=True)
+    #m1, s1, b1 = ax2.stem(dates_sec, wind, 'b', label = 'max wind (mph)', markerfmt='.', basefmt=' ', use_line_collection=True)
+    ax2.plot(dates_sec, wind, 'b', label = 'max wind (mph)')
     line = par2.plot(dates_sec, pres, 'gray', label = 'pres (inHg)')
 
     ## set up markers
-    fig.marker_enable(xreversed=True, xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True, top_axes=(ax1, ax2))
+    fig.marker_enable(xreversed=True, xformat=xdata_to_timestamp, show_xlabel=True, top_axes=(ax1, ax2))
     ax1.marker_ignore(b0)
-    ax2.marker_ignore(b1, line[0])
+    ax2.marker_ignore(line[0])
 
     ax2.marker_set_params(yformat=xydata_to_wind)
 
@@ -94,8 +95,6 @@ def plot_nws(plotloc='longmont'):
 
 
 def plot_aprs(site, days=7):
-    
-    matplotlib.use('Qt5Agg')
 
     ## fetch and unpack data
     title, time_data, weather_data = fetch_aprs_station(site, days)
@@ -135,6 +134,7 @@ def plot_aprs(site, days=7):
     par2 = ax2.twinx()
     ax2.grid(linewidth=0.5, linestyle='-')
     
+    fig.marker_enable(xreversed=True, xformat=xdata_to_timestamp, show_xlabel=True, top_axes=(ax1, ax2))
     #plt.sca(ax2)
     ax2.set_xticks(xlabels_sec)
     ax2.set_xticklabels(xlabels)
