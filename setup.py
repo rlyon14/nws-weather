@@ -3,6 +3,7 @@ from setuptools.command.install import install
 import subprocess
 import os
 from pathlib import Path
+import sys
 
 git_dependencies = [('markerplot', 'svn+https://github.com/rlyon14/markerplot/branches/dev#egg=markerplot'),]
 
@@ -42,11 +43,13 @@ class PostInstallCommand(install):
         print('Installing Packages: {}'.format(paths))
         commands = []
         for name, p in paths:
-            try:
-                return __import__(name)
-            except ImportError:
-                commands += ['pip install {}{}'.format('-e ' if editable else '', p)]
-        print(self.subprocess_cmd(*commands))
+            # try:
+            #     return __import__(name)
+            # except ImportError:
+            commands += ['pip install {}{}'.format('-e ' if editable else '', p)]
+        ret = self.subprocess_cmd(*commands)
+        raise RuntimeError(commands)
+        sys.stdout.write(ret)
 
 setup(
     name='noaahistory',

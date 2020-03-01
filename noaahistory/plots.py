@@ -12,12 +12,70 @@ import re
 from . nws_weather import fetch_nws_station
 from . aprs_weather import fetch_aprs_station
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QLineEdit, QInputDialog
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QLineEdit, QInputDialog, QWidget, QPushButton, QGridLayout, QLabel, QWidget
 from pathlib import Path
+import sys
 
 dir_ = Path(__file__).parent
 
+class InputDialog(QtWidgets.QMainWindow):
+    def __init__(self, parent, select_callback):       
+        super(InputDialog, self).__init__(parent)
+
+        self._main = QtWidgets.QWidget()
+        self.select_callback = select_callback
+        
+        #self.setStyle(QStyleFactory.create('Fusion'))
+
+        self.setCentralWidget(self._main)
+        layout = QGridLayout(self._main)
+        #self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+
+        label1 = QLabel("Station ID:")
+        label2 = QLabel("Days:")
+
+        self.station_id = QLineEdit()
+        self.days = QLineEdit()
+
+        okbutton = QPushButton("Ok")
+        okbutton.clicked.connect(self.select_station)
+        okbutton.setDefault(True)
+        cancelbutton = QPushButton("Cancel")
+        cancelbutton.clicked.connect(self.select_cancel)
+
+        layout.addWidget(label1,          0, 0)
+        layout.addWidget(self.station_id,  0, 1, 1,2)
+
+        layout.addWidget(label2,          1, 0)
+        layout.addWidget(self.days, 1, 1,1,2)
+
+        layout.addWidget(okbutton,          2, 1)
+        layout.addWidget(cancelbutton,   2, 2)
+
+        layout.setSpacing(5)
+
+        #self.setLayout(layout)
+        
+        self.setWindowTitle('Station Entry')
+
+    def select_station(self):
+        id = self.station_id.text()
+        days = self.days.text()
+        self.select_callback(id, days)
+        self.close()
+
+    def select_cancel(self):
+        self.close()
+
+    def keyPressEvent(self, event):
+        if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            self.select_station()
+        super().keyPressEvent(event)
+
+class Second(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        super(Second, self).__init__(parent)
 
 class WeatherPlot():
     def __init__(self, site, days=3):
@@ -27,6 +85,7 @@ class WeatherPlot():
         self.site = site
         self.days = days
         self.qapp = self.fig.qapp
+        self.app = self.fig.app
 
         self.par1 = self.ax1.twinx()
         self.par2 = self.ax2.twinx()
@@ -34,13 +93,20 @@ class WeatherPlot():
         self.fig.marker_enable(show_xlabel=True, top_axes=(self.ax1, self.ax2))
         self.ax2.marker_link(self.ax1)
 
-        self.qapp.add_toolbar_actions((dir_/ 'icons/location.png', 'Location', 'Set Station', self.set_station),
+        self.app.add_toolbar_actions((dir_/ 'icons/location.png', 'Location', 'Set Station', self.set_station),
                                     (dir_/ 'icons/refresh.png', 'Update', 'Update', self.plot ))
         self.plot(site)
 
-    def plot(self, site=None):
-
+    def plot(self, site=None, days=None):
+        print(days)
         site = self.site if site == None else site
+        days = days.strip() if days != None else self.days
+        if days == '':
+            days = self.days
+        try:
+            days = str(days)
+        except:
+            days = self.days
         
         self.ax1.clear()
         self.ax2.clear()
@@ -48,15 +114,16 @@ class WeatherPlot():
         self.par2.clear()
 
         self.ax2.patch.set_visible(False)
-        self.ax1.patch.set_visible(False)
+        self.ax1.patch.set_visible(False)   
+        print(days)
 
         #fig.canvas.draw()
         if site[0] == 'K' and len(site.strip()) == 4:
             self.plot_nws(site)
         else:
-            self.plot_aprs(site, days=self.days)
+            self.plot_aprs(site, days=days)
 
-        self.qapp.update_traces_group()
+        self.app.update_traces_group()
 
         self.ax1.legend(fontsize='small', loc='upper left')
         self.par1.legend(fontsize='small', loc='upper right')
@@ -64,17 +131,15 @@ class WeatherPlot():
         self.ax2.legend(fontsize='small', loc='upper left')
         self.par2.legend(fontsize='small', loc='upper right')
         self.fig.canvas.draw()
+        self.site = site
+        self.days = days
 
 
     def set_station(self):
-        site, ok = QInputDialog.getText(self.qapp, 'Station Entry', 'Station ID:')
-        
-        if ok:
-            try:
-                self.plot(site)
-                self.site = site
-            except:
-                pass
+        #site, ok = 
+        dialog = InputDialog(self.app, self.plot)
+        dialog.show()
+        #self.qapp.exec_()
 
     def plot_nws(self, site):
 
