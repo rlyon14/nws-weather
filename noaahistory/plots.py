@@ -98,7 +98,6 @@ class WeatherPlot():
         self.plot(site)
 
     def plot(self, site=None, days=None):
-        print(days)
         site = self.site if site == None else site
         days = days.strip() if days != None else self.days
         if days == '':
@@ -115,7 +114,6 @@ class WeatherPlot():
 
         self.ax2.patch.set_visible(False)
         self.ax1.patch.set_visible(False)   
-        print(days)
 
         #fig.canvas.draw()
         if site[0] == 'K' and len(site.strip()) == 4:
