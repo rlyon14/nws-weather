@@ -4,7 +4,7 @@ import subprocess
 import os
 from pathlib import Path
 
-git_dependencies = [('markerplot', 'svn+https://github.com/rlyon14/markerplot/trunk#egg=markerplot'),]
+git_dependencies = [('markerplot', 'svn+https://github.com/rlyon14/markerplot/branches/dev#egg=markerplot'),]
 
 dir_ = Path(__file__).parent
 import_path = str(dir_ / 'cli')

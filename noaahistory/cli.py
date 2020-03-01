@@ -1,4 +1,4 @@
-from noaahistory import plot_aprs, plot_nws, plotAirQuality, plot_compare
+from noaahistory import plotAirQuality, WeatherPlot
 import matplotlib.pyplot as plt
 import configparser
 from pathlib import Path
@@ -79,10 +79,7 @@ def cli(site, days, air, name, default):
         plot_compare(*site, days=days)
     else:
         site = site[0]
-        if site[0] == 'K' and len(site.strip()) == 4:
-            plot_nws(site)
-        else:
-            plot_aprs(site, days)
+        w = WeatherPlot(site, days)
 
         if name != None:
             write_station_name(name, site)
@@ -90,4 +87,12 @@ def cli(site, days, air, name, default):
     if default:
         set_station_default(site)
 
-    #plt.show()
+    plt.show()
+
+if __name__ == '__main__':
+    w = WeatherPlot('KLMO')
+    #plot_handler('KCLM', 'nws')
+
+    #plot_aprs('EW0013')
+    #plot_compare('KLMO', 'KSLC', 'KPVU',days=3)
+    plt.show()

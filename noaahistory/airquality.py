@@ -7,14 +7,13 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import matplotlib.dates as mdates
 #from cursorplot import Plotter
-import markerplot
+from markerplot import interactive_subplots
 import matplotlib
 import tkinter
 import re
 
 
 def plotAirQuality():
-    matplotlib.use('Qt5Agg')
     now = datetime.now()
     epoch = datetime.utcfromtimestamp(0)
     strt = float((now-epoch).total_seconds())
@@ -84,7 +83,7 @@ def plotAirQuality():
         idx = np.argmin(np.abs(plot_ts - sec))
         return show_ts[idx]
 
-    fig, ax = plt.subplots(1, 1, constrained_layout=True, figsize=(14,7))
+    fig, ax = interactive_subplots(1, 1, constrained_layout=True, figsize=(14,7))
     fig.marker_enable(xreversed=False, show_xlabel=True, xformat=xdata_to_timestamp)
     ax.grid(linewidth=0.5, linestyle='-')
 
