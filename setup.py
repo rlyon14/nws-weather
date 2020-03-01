@@ -48,7 +48,6 @@ class PostInstallCommand(install):
             # except ImportError:
             commands += ['pip install {}{}'.format('-e ' if editable else '', p)]
         ret = self.subprocess_cmd(*commands)
-        raise RuntimeError(commands)
         sys.stdout.write(ret)
 
 setup(
