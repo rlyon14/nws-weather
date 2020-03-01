@@ -95,6 +95,8 @@ class WeatherPlot():
 
         self.app.add_toolbar_actions((dir_/ 'icons/location.png', 'Location', 'Set Station', self.set_station),
                                     (dir_/ 'icons/refresh.png', 'Update', 'Update', self.plot ))
+
+        self.app.showMaximized()
         self.plot(site)
 
     def plot(self, site=None, days=None):
