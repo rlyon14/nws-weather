@@ -118,10 +118,14 @@ class WeatherPlot():
         self.ax1.patch.set_visible(False)   
 
         #fig.canvas.draw()
-        if site[0] == 'K' and len(site.strip()) == 4:
-            self.plot_nws(site)
-        else:
-            self.plot_aprs(site, days=days)
+        try:
+            if site[0] == 'K' and len(site.strip()) == 4:
+                self.plot_nws(site)
+            else:
+                self.plot_aprs(site, days=days)
+
+        except:
+            pass
 
         self.app.update_traces_group()
 
