@@ -263,8 +263,8 @@ class WeatherPlot():
         self.ax2.marker_ignore(line[0])
         #ax2.marker_ignore(line[0])
 
-        self.ax1.marker_set_params(xformat=xdata_to_timestamp)
-        self.ax2.marker_set_params(xformat=xdata_to_timestamp)
+        self.ax1.marker_set_params(xformat=xdata_to_timestamp, xreversed=False)
+        self.ax2.marker_set_params(xformat=xdata_to_timestamp, xreversed=False)
 
         self.ax2.marker_set_params(yformat=xydata_to_wind)
 

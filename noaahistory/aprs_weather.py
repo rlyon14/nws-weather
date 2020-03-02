@@ -69,6 +69,14 @@ def fetch_aprs_station(site, days):
     if label_hour_step > 3:
         label_hour_step -= (label_hour_step % 3)
 
+    if label_hour_step > 12:
+        label_hour_step -= (label_hour_step % 12)
+
+    if label_hour_step > 24:
+        label_hour_step -= (label_hour_step % 24)
+
+    print(label_hour_step)
+
     label_delta = datetime.timedelta(hours=dt[0].hour % label_hour_step, 
                                      minutes=dt[0].minute, 
                                      seconds=dt[0].second,
