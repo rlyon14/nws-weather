@@ -15,12 +15,12 @@ date_days = []
 date_label = []
 date_label_i = []
 
-days_projection = 5
+days_projection = 3
         # self.ax1.set_xticks(xlabels_sec)
         # self.ax1.set_xticklabels(xlabels)
 
 #us_data = np.array([13, 13, 13, 13, 13, 13, 15, 15, 51, 51, 57, 58, 60, 68 ,74, 
-us_data = np.array([98, 118, 149, 217, 262, 402, 518, 583, 959, 1.3e3, 1.7e3, 2.2e3, 2.7e3, 3.5e3, 4.6e3, 6.4e3, 7.8e3, 13.7e3, 19.1e3, 25.5e3, 33.3e3, 43.8e3, 53.7e3, 65.8e3, 83.8e3, 101.7e3, 121.5e3, 140.9e3, 161.8e3])
+us_data = np.array([98, 118, 149, 217, 262, 402, 518, 583, 959, 1.3e3, 1.7e3, 2.2e3, 2.7e3, 3.5e3, 4.6e3, 6.4e3, 7.8e3, 13.7e3, 19.1e3, 25.5e3, 33.3e3, 43.8e3, 53.7e3, 65.8e3, 83.8e3, 101.7e3, 121.5e3, 140.9e3, 161.8e3, 184.2e3])
 
 for i, dp in enumerate(us_data):
     date =start_date + datetime.timedelta(days=i)
@@ -85,6 +85,11 @@ ax2.marker_set_params( inherit_ticker=False)
 
 ax2.set_xticks(date_label_i)
 ax2.set_xticklabels(date_label)
+
+ax1.annotate(
+    '3/29 Worldwide Fast of \nthe Church of Jesus Christ\nof Latter-Day Saints',
+    xy=(27.3, .155), arrowprops=dict(arrowstyle='->'), xytext=(24, .35))
+
 
 ax3.plot(date_days[:-2], g_factor, label='growth_factor')
 ax3.set_ylabel('US Growth Rate')
