@@ -12,8 +12,8 @@ import re
 from . nws_weather import fetch_nws_station
 from . aprs_weather import fetch_aprs_station
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QLineEdit, QInputDialog, QWidget, QPushButton, QGridLayout, QLabel, QWidget
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtWidgets import QLineEdit, QInputDialog, QWidget, QPushButton, QGridLayout, QLabel, QWidget
 from pathlib import Path
 import sys
 
