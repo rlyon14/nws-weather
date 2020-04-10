@@ -15,13 +15,13 @@ date_days = []
 date_label = []
 date_label_i = []
 
-days_projection = 1
+days_projection = 15
         # self.ax1.set_xticks(xlabels_sec)
         # self.ax1.set_xticklabels(xlabels)
 
 #us_data = np.array([13, 13, 13, 13, 13, 13, 15, 15, 51, 51, 57, 58, 60, 68 ,74, 
 us_data = np.array([98, 118, 149, 217, 262, 402, 518, 583, 959, 1.3e3, 1.7e3, 2.2e3, 2.7e3, 3.5e3, 4.6e3, 6.4e3, 7.8e3, 13.7e3, 19.1e3, 25.5e3, 33.3e3, 43.8e3, 53.7e3, 65.8e3, 83.8e3, 101.7e3, 121.5e3, 140.9e3, 161.8e3, 188.2e3, 213.4e3,
-                    243.5e3, 275.6e3, 308.9e3, 337.1e3, 366.6e3, 385e3])
+                    243.5e3, 275.6e3, 308.9e3, 337.1e3, 366.6e3, 396.2e3, 429.1e3])#, 454.3e3])
 
 for i, dp in enumerate(us_data):
     date =start_date + datetime.timedelta(days=i)
@@ -55,15 +55,15 @@ def xformat(x, idx=None):
 def yformat(x, y, mxd):
     return '{:0.3f}'.format(y)
 
-fig, (ax1, ax2, ax3) = interactive_subplots(3, 1, figsize=(20,10), constrained_layout=True, show_xlabel=True, xformat=xformat, show_yline=False)
+fig, (ax1, ax2, ax3) = interactive_subplots(3, 1, figsize=(20,10), constrained_layout=True, show_xlabel=True, xformat=xformat, show_yline=True, autoscale=True)
 
 date_days = np.array(date_days)
 date_days_p = np.array(date_days_p)
 
-r = 1.3
+r = 1.08
 
 data = (us_data)/1
-model = (r**(date_days_p + 18))/1
+model = (r**(date_days_p + 130))/1
 
 data_log = np.log10(data)
 model_log = np.log10(model)
@@ -87,9 +87,9 @@ ax2.marker_set_params( inherit_ticker=False)
 ax2.set_xticks(date_label_i)
 ax2.set_xticklabels(date_label)
 
-ax1.annotate(
-    '3/29 Worldwide Fast of \nthe Church of Jesus Christ\nof Latter-Day Saints',
-    xy=(27.3, .155), arrowprops=dict(arrowstyle='->'), xytext=(24, .35))
+# ax1.annotate(
+#     '3/29 Worldwide Fast of \nthe Church of Jesus Christ\nof Latter-Day Saints',
+#     xy=(27.3, .155), arrowprops=dict(arrowstyle='->'), xytext=(24, .35))
 
 
 ax3.plot(date_days[:-2], g_factor, label='growth_factor')
