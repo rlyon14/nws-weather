@@ -119,7 +119,12 @@ class WeatherPlot():
 
         #fig.canvas.draw()
         try:
-            if site[0] == 'K' and len(site.strip()) == 4:
+            if isinstance(site, (tuple, list)):
+                self.plot_compare(*site, days=days)
+            elif len(site.strip().split(' ')) > 1:
+                site = site.strip().split(' ')
+                self.plot_compare(*site, days=days)
+            elif site[0] == 'K' and len(site.strip()) == 4:
                 self.plot_nws(site)
             else:
                 self.plot_aprs(site, days=days)
@@ -273,7 +278,7 @@ class WeatherPlot():
 
 
     def plot_compare(self, *sites, days=7):
-        matplotlib.use('Qt5Agg')
+
         titles = [None]*len(sites)
         time_dataz = [None]*len(sites)
         weather_dataz = [None]*len(sites) 
@@ -283,9 +288,6 @@ class WeatherPlot():
                 titles[i], time_dataz[i], weather_dataz[i] = fetch_nws_station(site)
             else:
                 titles[i], time_dataz[i], weather_dataz[i]  = fetch_aprs_station(site, days)
-
-        fig, (ax1) = interactive_subplots(1, 1, figsize=(18 ,9), constrained_layout=True)
-        ax1.grid(linewidth=0.5, linestyle='-')
 
         ## find earliest start time
         start_idx = 0
@@ -303,9 +305,16 @@ class WeatherPlot():
                 max_points = len(dates_sec)
 
 
-        ax1.set_xticks(time_dataz[start_idx][3])
-        ax1.set_xticklabels(time_dataz[start_idx][2])
-        ax1.tick_params(labelsize='small')
+        self.ax1.set_xticks(time_dataz[start_idx][3])
+        self.ax1.set_xticklabels(time_dataz[start_idx][2])
+        self.ax1.tick_params(labelsize='small')
+
+        self.ax2.set_xticks(time_dataz[start_idx][3])
+        self.ax2.set_xticklabels(time_dataz[start_idx][2])
+        self.ax2.tick_params(labelsize='small')
+        
+        self.ax1.grid(linewidth=0.5, linestyle='-')
+        self.ax2.grid(linewidth=0.5, linestyle='-')
         titles = list(titles)
 
         ## adjust other time data to new reference
@@ -315,11 +324,13 @@ class WeatherPlot():
             (temps, dew, wind, wind_dir, cond, pres, precip) = weather_dataz[i]
 
             dates_sec = np.array(dates_sec_t)
-            data = np.array(temps)
+            temp_data = np.array(temps)
+            dp_data = np.array(dew)
 
             if site[0] == 'K' and len(site.strip()) == 4:
                 dates_sec = np.flip(dates_sec)
-                data = np.flip(data)
+                temp_data = np.flip(temp_data)
+                dp_data = np.flip(dp_data)
 
             if i != start_idx: 
                 start_time_t = start_time.replace(tzinfo=None)
@@ -327,17 +338,17 @@ class WeatherPlot():
                 delta = (start_time_t - start).total_seconds()
                 dates_sec += delta
 
-            ax1.plot(dates_sec, data, label = '{} ({}) $\degree$F'.format(titles[i], sites[i]))
+            self.ax1.plot(dates_sec, temp_data, label = '{} ({}) $\degree$F'.format(titles[i], sites[i]))
+            self.ax2.plot(dates_sec, dp_data, label = '{} ({}) $\degree$F'.format(titles[i], sites[i]))
 
         def xdata_to_timestamp(sec):
             dt = start + datetime.timedelta(seconds=sec)
             return dt.strftime('%m/%d %H:%M')
 
-        ax1.legend(fontsize='small', loc='upper left')  
-        fig.marker_enable(xformat=xdata_to_timestamp, show_dot=True, show_xlabel=True)
-        plt.show()
-        #ax1.marker_add(xd=dates_sec[-1])
-
+        self.ax1.legend(fontsize='small', loc='upper left') 
+        self.ax2.legend(fontsize='small', loc='upper left')   
+        self.ax1.marker_set_params(xreversed=True, xformat=xdata_to_timestamp)
+        self.ax2.marker_set_params(xreversed=True, xformat=xdata_to_timestamp)
 
 if __name__ == '__main__':
     plot_nws('KLMO')

@@ -76,7 +76,7 @@ def cli(site, days, air, name, default):
         site = get_station_default()
 
     if len(site) > 1:
-        plot_compare(*site, days=days)
+        w = WeatherPlot(site, days)
     else:
         site = site[0]
         w = WeatherPlot(site, days)
