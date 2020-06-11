@@ -73,9 +73,6 @@ class InputDialog(QtWidgets.QMainWindow):
             self.select_station()
         super().keyPressEvent(event)
 
-class Second(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
-        super(Second, self).__init__(parent)
 
 class WeatherPlot():
     def __init__(self, site, days=3):
