@@ -36,7 +36,6 @@ def get_sensor_data(channel, key, days=1):
     data = urllib.request.urlopen(r'https://api.thingspeak.com/channels/{}/feeds.json?api_key={}&days={}'.format(channel, key, days)).read().decode('utf-8')
     return json.loads(data)
 
-## MORGAN : 30993
 ## BEND: 34145
 ch_id, api_key, site_label = get_station_api_keys(30993)
 s = get_sensor_data(ch_id, api_key, days=1)
@@ -94,7 +93,7 @@ for h in range(int(hour_span/label_hour_step) +1):
 
     
 ## plotting
-fig, ax1 = interactive_subplots(figsize=(20,10), constrained_layout=True)
+fig, ax1 = interactive_subplots(figsize=(15,10), constrained_layout=False)
 
 def xdata_to_timestamp(sec):
     dt = start_time + datetime.timedelta(seconds=sec)
@@ -124,8 +123,11 @@ ax1.axhspan(150, 250, facecolor='purple', alpha=0.3)
 ax1.axhspan(250, 500, facecolor='maroon', alpha=0.3)
 
 ax1.set_ylim([-5, 100])
+ax1.marker_add(xd=dates_sec[-1])
 
-plt.show()
+plt.tight_layout()
+fig.savefig(r'C:\Users\rlyon\site\pages\air_quality_history.png')
+# plt.show()
     
     
     
