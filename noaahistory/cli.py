@@ -1,4 +1,4 @@
-from noaahistory import plotAirQuality, WeatherPlot
+from noaahistory import WeatherPlot
 import matplotlib.pyplot as plt
 import configparser
 from pathlib import Path
