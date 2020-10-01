@@ -129,7 +129,7 @@ class WeatherPlot():
         except:
             pass
 
-        self.app.update_traces_group()
+        # self.app.update_traces_group()
 
         self.ax1.legend(fontsize='small', loc='upper left')
         self.par1.legend(fontsize='small', loc='upper right')
