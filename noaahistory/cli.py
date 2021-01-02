@@ -2,6 +2,8 @@ from noaahistory import WeatherPlot
 import matplotlib.pyplot as plt
 import configparser
 from pathlib import Path
+# import purple_air
+from . purple_air import show_plots
 
 import click
 
@@ -70,7 +72,7 @@ def cli(site, days, air, name, default):
             site[i] = station_names[s]
 
     if (air):
-        p1 = plotAirQuality()
+        show_plots('uintah', 'morgan_city_b')
     
     if len(site) == 0:
         site = get_station_default()

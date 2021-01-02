@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from dateutil import tz
 import configparser
 from pathlib import Path
+from markerplot import interactive_subplots
 
 def query_sensor_data(name, days=1, sensor='primary'):
     dir_ = Path(__file__).parent
@@ -88,7 +89,7 @@ def get_plot_data(name, days=1, sensor='primary'):
 def create_plot(time_data, title=''):
     start_time, xlabels, xlabels_sec = time_data
     
-    fig, ax1 = plt.subplots(figsize=(15,9), constrained_layout=False)
+    fig, ax1 = interactive_subplots(figsize=(15,9), constrained_layout=False)
     fig.marker_enable()
     
     def xdata_to_timestamp(sec):
@@ -128,19 +129,23 @@ def plot_air_data(axes, air_data, label='', color=None, alpha=None, marker=False
         axes.set_xlim([dates_sec[0] -5000, dates_sec[-1] + 5000])
     else:
         axes.marker_ignore(*l1)
-    
-time_data, air_data, label = get_plot_data('morgan_city_b', days=1)
-axes = create_plot(time_data)
-plot_air_data(axes, air_data, label=label, marker=True)
 
-time_data, air_data, label = get_plot_data('mountain_green', days=1)
-plot_air_data(axes, air_data, label=label, marker=False, color='gray', alpha=0.4)
+def show_plots(*sites, savefig=False):
+    time_data, air_data, label = get_plot_data(sites[0], days=1)
+    axes = create_plot(time_data)
+    plot_air_data(axes, air_data, label=label, marker=True)
 
-axes.set_ylim([-5, 100])
+    for s in sites[1:]:
 
+        time_data, air_data, label = get_plot_data(s, days=1)
+        plot_air_data(axes, air_data, label=label[:12], marker=False, alpha=0.2, color='gray')
 
-plt.tight_layout()
-plt.legend()
-axes.figure.savefig(r'air_quality_history.png')
+    axes.set_ylim([-5, 100])
 
+    plt.tight_layout()
+    plt.legend()
+    if savefig:
+        axes.figure.savefig(r'air_quality_history.png')
+
+# show_plots('uintah', 'morgan_city_b')
 # plt.show()
