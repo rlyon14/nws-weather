@@ -77,7 +77,8 @@ class HTMLnode:
             subTag._printNode(tabs+"\t", fileOut)
             subTag = subTag.nextSib
 
-        fileOut.write("</"+self.tag+">")
+        if self.tag != 'br':
+            fileOut.write("</"+self.tag+">")
 
     def getAllContent(self):
         if (self.tag == 'content'):
@@ -148,7 +149,7 @@ TAG_STYLE = 3
 
 class HTMLreader:
     ## voidElements cannot have child tags
-    voidElements = ["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr", "p"]
+    voidElements = ["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]
     states = ["INIT", "TAG", "TAG_NAME", "ATTR_KEY", "ATTR_VAL", "ATTR_VAL_QUOTE_ON", "ATTR_VAL_SQUOTE_ON", "ATTR_VAL_QUOTE_OFF", "SCRIPT", "SCRIPT_END", "CONTENT", "END_TAG", "COMMENT", "END_TAG_SCRIPT", "COMMENT_TAG", "COMMENT_PR", "STYLE_CSS", "END_TAG_STYLE", "STYLE_END"]
 
     def __init__(self, stream, printWarnings = False):
